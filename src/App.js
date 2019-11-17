@@ -1,10 +1,12 @@
 import React, {Fragment} from 'react';
 import Header from './components/Header'
 import CategoriasProvider from './context/CategoriasContext';
+import EventosProvider from './context/EventosContext';
 import Formulario from './components/Formulario';
 
 function App() {
   return (
+    <EventosProvider>
     <CategoriasProvider>
         <Header></Header>
         <div className='uk-container'>
@@ -12,7 +14,7 @@ function App() {
         </div>
         
     </CategoriasProvider>
-    
+    </EventosProvider>
   );
 }
 

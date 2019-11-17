@@ -1,13 +1,31 @@
 import React, { Component } from 'react';
+import {CategoriasConsumer} from '../context/CategoriasContext';
+import {EventosConsumer} from '../context/EventosContext';
 
 class Formulario extends Component {
     state = {
         nombre: '',
         categoria: ''
     }
+
+    //al poner un evento o categoria
+    obtenerEvento= (e)=>{
+        this.setState(
+            {
+                [e.target.name]: e.target.value
+            }
+        )
+    }
     render() {
         return (
-            <form>
+            <EventosConsumer>
+            {(value)=>{
+                
+            return (
+            <form onSubmit={(e)=>{
+                e.preventDefault();
+                value.obtenerEventos(this.state)
+            }}>
                 <fieldset className= 'uk-fieldset uk-margin'>
                     <legend className = 'uk-legend uk-text-center'>
                         Buscar evento por Nombre o Categoria
@@ -20,6 +38,7 @@ class Formulario extends Component {
                         className='uk-input'
                         type = 'text'
                         placeholder = 'Nombre de evento o Ciudad'
+                        onChange = {this.obtenerEvento}
                         />
                        
                     </div>
@@ -27,7 +46,21 @@ class Formulario extends Component {
                         <select
                         name = 'categoria'
                         className='uk-select'
-                        />
+                        onChange = {this.obtenerEvento}
+                        >
+                            <option value=''>--Seleccionar categoria--</option>
+                            <CategoriasConsumer>
+                                {(value)=>{
+                                    return (
+                                        value.categorias.map(categoria=>(
+                                            <option key={categoria.id} value={categoria.id} data-uk-form-select>
+                                                {categoria.name_localized}
+                                            </option>
+                                        ))
+                                    )
+                                }}
+                            </CategoriasConsumer>
+                        </select>
                        
                     </div>
                     <div>
@@ -35,6 +68,8 @@ class Formulario extends Component {
                     </div>
                 </div>
             </form>
+            )}}
+            </EventosConsumer>
         );
     }
 }
